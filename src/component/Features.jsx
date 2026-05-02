@@ -1,115 +1,146 @@
-import { useState } from 'react'
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Shield, UserCheck, Radio, Clock, ArrowRight } from 'lucide-react';
 
 const features = [
-  { 
+  {
     id: '01',
-    icon: '🛡️', 
-    title: 'Certified Safety Protocols', 
-    desc: 'Beyond standard insurance, our entire fleet undergoes rigorous 50-point safety inspections and daily sanitization cycles.' 
+    icon: <Shield className="w-6 h-6" />,
+    title: 'Certified Safety Protocols',
+    desc: 'Beyond standard insurance, our entire fleet undergoes rigorous 50-point safety inspections and daily sanitization cycles.'
   },
-  { 
+  {
     id: '02',
-    icon: '🧑‍✈️', 
-    title: 'Elite Chauffeur Corps', 
-    desc: 'Our professionals are not just drivers; they are background-verified concierge experts trained in defensive driving and etiquette.' 
+    icon: <UserCheck className="w-6 h-6" />,
+    title: 'Elite Chauffeur Corps',
+    desc: 'Our professionals are background-verified concierge experts trained in defensive driving and premium etiquette.'
   },
-  { 
+  {
     id: '03',
-    icon: '📍', 
-    title: 'Fleet Intelligence', 
-    desc: 'Advanced GPS telemetry provides live tracking and encrypted trip-sharing capabilities for enhanced passenger security.' 
+    icon: <Radio className="w-6 h-6" />,
+    title: 'Fleet Intelligence',
+    desc: 'Advanced GPS telemetry provides live tracking and encrypted trip-sharing capabilities for enhanced security.'
   },
-  { 
+  {
     id: '04',
-    icon: '🕐', 
-    title: 'Precision Scheduling', 
-    desc: 'Our 24/7 operations center ensures 99.9% on-time arrivals, managing real-time flight tracking and traffic rerouting.' 
+    icon: <Clock className="w-6 h-6" />,
+    title: 'Precision Scheduling',
+    desc: 'Our 24/7 operations center ensures 99.9% on-time arrivals, managing real-time flight tracking and rerouting.'
   },
-]
+];
 
-export default function Features() {
+const Features = () => {
   return (
-    <section className="bg-slate-50 py-28 px-6 lg:px-12 relative overflow-hidden">
-      
-      {/* Background brand watermark */}
-      <div className="absolute top-10 left-10 text-[15rem] font-black text-slate-100 select-none pointer-events-none leading-none">
-        2018
+    <section className="relative py-24 lg:py-32 bg-white overflow-hidden">
+      {/* Decorative Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute -top-[10%] -left-[5%] text-[20rem] font-black text-slate-50/80 select-none leading-none">
+          2018
+        </div>
       </div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
-
-        {/* Header: Centered & Authoritative */}
-        <div className="flex flex-col items-center text-center mb-20">
-          <div className="inline-flex items-center gap-3 mb-4">
-            <span className="h-[1px] w-10 bg-amber-500" />
-            <span className="text-amber-600 text-xs font-bold tracking-[0.3em] uppercase">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        
+        {/* Header Section */}
+        <div className="max-w-3xl mb-20">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="flex items-center gap-4 mb-6"
+          >
+            <span className="h-[2px] w-12 bg-amber-500" />
+            <span className="text-amber-600 text-sm font-bold tracking-[0.4em] uppercase">
               The Standard of Excellence
             </span>
-            <span className="h-[1px] w-10 bg-amber-500" />
-          </div>
-          <h2 className="text-4xl lg:text-6xl font-extrabold text-slate-900 leading-tight">
-            The Pooja Travel <span className="text-amber-500 italic font-medium">Commitment</span>
-          </h2>
-          <p className="mt-6 text-slate-500 max-w-2xl text-lg font-light">
-            Defining premium road travel since 2018 through meticulous maintenance, 
+          </motion.div>
+          
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-5xl lg:text-7xl font-bold text-slate-900 leading-[1.1] tracking-tight"
+          >
+            The Pooja Travel <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-amber-600 italic font-serif">Commitment</span>
+          </motion.h2>
+          
+          <motion.p 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="mt-8 text-slate-500 text-xl font-light leading-relaxed max-w-2xl"
+          >
+            Defining premium road travel through meticulous maintenance, 
             professional integrity, and technological innovation.
-          </p>
+          </motion.p>
         </div>
 
-        {/* Grid: Modern Executive Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {features.map((f) => (
-            <div
-              key={f.title}
-              className="group bg-white border border-slate-200 rounded-xl p-10 relative
-                hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] hover:border-amber-500/30
-                transition-all duration-500 ease-in-out hover:-translate-y-2"
+        {/* Features Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {features.map((feature, index) => (
+            <motion.div
+              key={feature.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              whileHover={{ y: -10 }}
+              className="group relative bg-slate-50 border border-slate-200 p-8 lg:p-10 rounded-2xl transition-all duration-300 hover:bg-white hover:shadow-2xl hover:shadow-slate-200 hover:border-amber-200"
             >
-              {/* Corner Index Number */}
-              <div className="absolute top-6 right-8 text-slate-100 font-black text-4xl group-hover:text-amber-500/10 transition-colors">
-                {f.id}
+              <div className="absolute top-8 right-8 text-slate-200 font-bold text-5xl group-hover:text-amber-100 transition-colors duration-300">
+                {feature.id}
               </div>
 
-              <div className="w-14 h-14 bg-slate-900 rounded-xl flex items-center justify-center text-3xl mb-8 
-                group-hover:bg-amber-500 group-hover:rotate-[10deg] transition-all duration-500 shadow-lg shadow-slate-200">
-                {f.icon}
-              </div>
+              <div className="relative z-10">
+                <div className="w-16 h-16 bg-slate-900 text-amber-500 rounded-xl flex items-center justify-center mb-8 group-hover:bg-amber-500 group-hover:text-white transition-all duration-500 transform group-hover:rotate-6">
+                  {feature.icon}
+                </div>
 
-              <h3 className="text-xl font-bold text-slate-900 mb-4 tracking-tight">
-                {f.title}
-              </h3>
-              
-              <p className="text-slate-500 text-sm leading-relaxed font-medium opacity-80 group-hover:opacity-100">
-                {f.desc}
-              </p>
+                <h3 className="text-2xl font-bold text-slate-900 mb-4 tracking-tight">
+                  {feature.title}
+                </h3>
+                
+                <p className="text-slate-600 leading-relaxed mb-8">
+                  {feature.desc}
+                </p>
 
-              {/* Bottom Decorative Accent */}
-              <div className="mt-8 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <span className="text-[10px] font-bold text-amber-600 uppercase tracking-widest">Read Protocol</span>
-                <span className="h-[1px] w-6 bg-amber-500" />
+                <button className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400 group-hover:text-amber-600 transition-colors">
+                  View Details <ArrowRight className="w-4 h-4 transform group-hover:translate-x-2 transition-transform" />
+                </button>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
-        {/* Bottom Call to Action */}
-        <div className="mt-20 py-10 border-t border-slate-200 flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="flex items-center gap-6">
-                <div className="flex flex-col">
-                    <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Established</span>
-                    <span className="text-slate-900 font-bold text-xl">Since 2018</span>
-                </div>
-                <div className="w-[1px] h-10 bg-slate-200" />
-                <div className="flex flex-col">
-                    <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Availability</span>
-                    <span className="text-slate-900 font-bold text-xl">24/7 Operations</span>
-                </div>
+        {/* Action Footer */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="mt-20 pt-12 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-10"
+        >
+          <div className="flex items-center gap-12">
+            <div>
+              <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em] mb-1">Established</p>
+              <p className="text-slate-900 font-extrabold text-2xl">Since 2018</p>
             </div>
-            <button className="bg-slate-900 text-white px-10 py-4 rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-amber-600 transition-all shadow-xl shadow-slate-200">
-                View Fleet Specifications
-            </button>
-        </div>
+            <div className="w-px h-12 bg-slate-200 hidden md:block" />
+            <div>
+              <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em] mb-1">Support</p>
+              <p className="text-slate-900 font-extrabold text-2xl">24/7 Live</p>
+            </div>
+          </div>
+
+          <button className="relative overflow-hidden group bg-slate-950 text-white px-12 py-5 rounded-full font-bold text-sm uppercase tracking-widest transition-all hover:pr-16 active:scale-95">
+            <span className="relative z-10">Explore the Fleet</span>
+            <div className="absolute right-0 top-0 h-full w-12 flex items-center justify-center bg-amber-500 opacity-0 group-hover:opacity-100 transition-all">
+              <ArrowRight className="w-5 h-5 text-slate-900" />
+            </div>
+          </button>
+        </motion.div>
       </div>
     </section>
-  )
-}
+  );
+};
+
+export default Features;
