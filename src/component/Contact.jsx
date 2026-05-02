@@ -1,9 +1,9 @@
 import { useState } from 'react'
 
 const contactItems = [
-  { icon: '📞', label: 'Primary Contact', value: '+91 88798 54275' },
-  { icon: '✉️', label: 'Dispatch Email', value: 'info@poojatravel.com' },
-  { icon: '📍', label: 'Headquarters', value: 'Pune, Maharashtra, India' },
+  { icon: '📞', label: 'Primary Contact', value: '+91 95949 17750' },
+  { icon: '✉️', label: 'Dispatch Email', value: 'poojatravels111@gmail.com' },
+  { icon: '📍', label: 'Headquarters', value: 'Mumbai, Maharashtra, India' },
   { icon: '🕐', label: 'Operations', value: '24/7 Executive Support' },
 ]
 
