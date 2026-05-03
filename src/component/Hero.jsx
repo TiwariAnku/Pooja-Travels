@@ -21,18 +21,19 @@ Premium Car Rental Service
 GSTIN: 27AICPT7468H1ZP
 ________________________________
 
-CAB BOOKING FORMAT
+CAB BOOKING 
 
 Sr.No.  Details
 ------  ------------------------------------------
+1       Cab Booking Format
 2       Emp Name                  : ${form.name || 'N/A'}
-9       Cell No.                  : ${form.mobile || 'N/A'}
-10      Pick Up City & Address    : ${form.pickup || 'N/A'}
-11      Date & Time of Pick up    : ${form.startDate || 'N/A'} at ${form.inTime || 'N/A'}
-12      Drop City & Address       : ${form.endDate || 'N/A'}
-13      Date & Time of drop       : ${form.outTime || 'N/A'}
-14      Car Type                  : ${form.carType}
-15      Any Other Remarks /
+3       Cell No.                  : ${form.mobile || 'N/A'}
+4       Pick Up City & Address    : ${form.pickup || 'N/A'}
+5       Date & Time of Pick up    : ${form.startDate || 'N/A'} at ${form.inTime || 'N/A'}
+6       Drop City & Address       : ${form.endDate || 'N/A'}
+7       Date & Time of drop       : ${form.outTime || 'N/A'}
+8       Car Type                  : ${form.carType}
+9       Any Other Remarks /
         Specific Requirements     : ${form.email || 'N/A'}
 
 ________________________________
@@ -91,7 +92,7 @@ Thank you for choosing Pooja Travels.`
               className="flex items-start gap-3 max-w-md hover:text-amber-400 transition-colors"
             >
               <span className="text-amber-500 font-bold">📍</span>
-              <p>Room No. 194, Vishnu Nagar Society, L.U. Gadkari Marg, Chembur, Mumbai-400 074</p>
+              <p>Office No. 194, Vishnu Nagar Society, L.U. Gadkari Marg, Chembur, Mumbai-400 074</p>
             </a>
             <div className="flex flex-wrap gap-6 items-center">
               <div className="flex items-center gap-2">
@@ -187,9 +188,9 @@ Thank you for choosing Pooja Travels.`
               type="submit"
               className="w-full bg-slate-900 text-white font-bold text-sm tracking-widest uppercase py-4 rounded-lg hover:bg-amber-600 transition-all duration-300 shadow-lg active:scale-[0.98] flex items-center justify-center gap-3"
             >
-              <span>📲</span>
-              <span>Send Booking · WhatsApp & Email</span>
-              <span>✉️</span>
+             
+              <span>Send Booking</span>
+              
             </button>
             
             <div className="flex justify-between items-center px-1">
