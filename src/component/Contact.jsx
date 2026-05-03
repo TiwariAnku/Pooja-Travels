@@ -11,6 +11,42 @@ export default function Contact() {
   const [form, setForm] = useState({ name: '', phone: '', email: '', service: '', date: '', message: '' })
   const handle = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    const message =
+`POOJA TRAVELS
+Premium Car Rental Service
+GSTIN: 27AICPT7468H1ZP
+______________________________
+
+BOOKING REQUEST
+
+PASSENGER DETAILS
+  Name        : ${form.name || 'N/A'}
+  Mobile      : ${form.phone || 'N/A'}
+  Email       : ${form.email || 'N/A'}
+
+VEHICLE & PICKUP
+  Service     : ${form.service || 'N/A'}
+
+JOURNEY SCHEDULE
+  Date        : ${form.date || 'N/A'}
+
+ADDITIONAL REQUIREMENTS
+  ${form.message || 'N/A'}
+
+______________________________
+Chembur, Mumbai - 400 074
+Contact : 9594917750 / 9702909087
+
+Kindly confirm the booking at the earliest.
+Thank you for choosing Pooja Travels.`
+
+    const encoded = encodeURIComponent(message)
+    window.open(`https://wa.me/919594917750?text=${encoded}`, '_blank')
+  }
+
   // Sophisticated input style matching the Hero section
   const inputCls = `w-full bg-slate-50 border border-slate-200 focus:border-amber-500 text-slate-900 
     px-4 py-3 text-sm outline-none transition-all duration-300 rounded-md font-medium shadow-sm`
@@ -66,7 +102,7 @@ export default function Contact() {
             <p className="text-sm text-slate-400">Request a custom quote for your upcoming journey.</p>
           </div>
 
-          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label className={labelCls}>Client Name</label>
@@ -111,8 +147,11 @@ export default function Contact() {
                 className={inputCls + ' resize-none'} />
             </div>
 
-            <button className="w-full bg-slate-900 text-white font-bold text-xs tracking-[0.2em] uppercase py-5 rounded-lg
-              hover:bg-amber-600 hover:-translate-y-1 hover:shadow-2xl hover:shadow-amber-200 transition-all duration-500 active:scale-95 shadow-xl shadow-slate-200">
+            <button
+              type="submit"
+              className="w-full bg-slate-900 text-white font-bold text-xs tracking-[0.2em] uppercase py-5 rounded-lg
+              hover:bg-amber-600 hover:-translate-y-1 hover:shadow-2xl hover:shadow-amber-200 transition-all duration-500 active:scale-95 shadow-xl shadow-slate-200"
+            >
               Submit Request →
             </button>
           </form>

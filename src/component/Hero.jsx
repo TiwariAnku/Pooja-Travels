@@ -2,7 +2,8 @@ import { useState } from 'react'
 
 export default function Hero() {
   const [form, setForm] = useState({
-    carType: 'Innova Crysta', pickup: '', pickupDate: '', pickupTime: '',
+    carType: 'Innova Crysta', pickup: '',
+    startDate: '', endDate: '', inTime: '', outTime: '',
     name: '', mobile: '', email: ''
   })
 
@@ -11,6 +12,41 @@ export default function Hero() {
   const inputCls = `w-full bg-white border border-slate-200 text-slate-900 px-4 py-3 text-sm focus:border-amber-500 outline-none transition-all rounded-md font-medium shadow-sm`
   const labelCls = `block text-[10px] font-bold text-slate-500 uppercase mb-1 ml-1 tracking-wider`
 
+ const handleBooking = (e) => {
+    e.preventDefault()
+
+    const message =
+`POOJA TRAVELS
+Premium Car Rental Service
+GSTIN: 27AICPT7468H1ZP
+______________________________
+
+BOOKING REQUEST
+
+PASSENGER DETAILS
+  Name        : ${form.name || 'N/A'}
+  Mobile      : ${form.mobile || 'N/A'}
+
+VEHICLE & PICKUP
+  Vehicle     : ${form.carType}
+  Pickup      : ${form.pickup || 'N/A'}
+
+JOURNEY SCHEDULE
+  Start Date  : ${form.startDate || 'N/A'}
+  End Date    : ${form.endDate || 'N/A'}
+  In Time     : ${form.inTime || 'N/A'}
+  Out Time    : ${form.outTime || 'N/A'}
+
+______________________________
+Chembur, Mumbai - 400 074
+Contact : 9594917750 / 9702909087
+
+Kindly confirm the booking at the earliest.
+Thank you for choosing Pooja Travels.`
+
+    const encoded = encodeURIComponent(message)
+    window.open(`https://wa.me/919594917750?text=${encoded}`, '_blank')
+  }
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden font-sans bg-[#0F172A]">
       
@@ -26,7 +62,7 @@ export default function Hero() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 w-full pt-20 pb-32 grid lg:grid-cols-12 gap-12 items-center">
         
-        {/* LEFT: BRANDING & BUSINESS DETAILS FROM image_c03d9b.jpg */}
+        {/* LEFT: BRANDING & BUSINESS DETAILS */}
         <div className="lg:col-span-7 text-white">
           <div className="mb-8">
             <span className="bg-amber-500 px-3 py-1 rounded text-slate-900 font-bold text-xs uppercase tracking-wider">
@@ -37,38 +73,31 @@ export default function Hero() {
             </h1>
           </div>
 
-          {/* DYNAMIC PRICING PANEL */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 bg-white/5 p-6 rounded-xl border border-white/10 backdrop-blur-sm">
-            <div>
-              <h3 className="text-amber-500 font-bold uppercase text-xs tracking-widest mb-2">Innova Crysta Rates</h3>
-              <p className="text-slate-200 text-sm leading-relaxed">
-                <span className="font-bold text-white">8Hrs / 80km:</span> ₹3500 <br />
-                <span className="font-bold text-white">Full Day Duty:</span> ₹5000
-              </p>
-            </div>
-            <div className="border-l border-white/10 pl-4">
-              <h3 className="text-amber-500 font-bold uppercase text-xs tracking-widest mb-2">Additional</h3>
-              <p className="text-slate-200 text-sm leading-relaxed">
-                Extra Km: ₹20 | Extra Hr: ₹200 <br />
-                <span className="italic text-slate-400 text-xs">Toll & Parking extra. GST bill available.</span>
-              </p>
-            </div>
-          </div>
-
           {/* OFFICE & CONTACT DETAILS */}
           <div className="space-y-4 text-slate-300 text-sm">
-            <div className="flex items-start gap-3 max-w-md">
+            <a
+              href="https://maps.google.com/?q=Room+No.+194,+Vishnu+Nagar+Society,+L.U.+Gadkari+Marg,+Chembur,+Mumbai-400074"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-start gap-3 max-w-md hover:text-amber-400 transition-colors"
+            >
               <span className="text-amber-500 font-bold">📍</span>
               <p>Room No. 194, Vishnu Nagar Society, L.U. Gadkari Marg, Chembur, Mumbai-400 074</p>
-            </div>
+            </a>
             <div className="flex flex-wrap gap-6 items-center">
               <div className="flex items-center gap-2">
                 <span className="text-amber-500 font-bold">📞</span>
-                <span className="text-white font-mono text-lg">9594917750 / 9702909087</span>
+                <div className="flex gap-2 font-mono text-lg">
+                  <a href="tel:+919594917750" className="text-white hover:text-amber-400 transition-colors">9594917750</a>
+                  <span>/</span>
+                  <a href="tel:+919702909087" className="text-white hover:text-amber-400 transition-colors">9702909087</a>
+                </div>
               </div>
               <div className="flex items-center gap-2 border-l border-white/20 pl-6">
                 <span className="text-amber-500 font-bold">✉️</span>
-                <span>poojatravels111@gmail.com</span>
+                <a href="mailto:poojatravels111@gmail.com" className="hover:text-amber-400 transition-colors">
+                  poojatravels111@gmail.com
+                </a>
               </div>
             </div>
           </div>
@@ -81,7 +110,7 @@ export default function Hero() {
             <p className="text-sm text-slate-500">Official GST Registered Service</p>
           </div>
 
-          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-4" onSubmit={handleBooking}>
             <div className="grid grid-cols-1 gap-3">
               <div>
                 <label className={labelCls}>Vehicle Category</label>
@@ -99,12 +128,20 @@ export default function Hero() {
                 <input name="pickup" placeholder="Airport, Chembur, or Local Address" className={inputCls} onChange={handle} />
               </div>
               <div>
-                <label className={labelCls}>Date</label>
-                <input name="pickupDate" type="date" className={inputCls} onChange={handle} />
+                <label className={labelCls}>Start Date</label>
+                <input name="startDate" type="date" className={inputCls} onChange={handle} />
               </div>
               <div>
-                <label className={labelCls}>Time</label>
-                <input name="pickupTime" type="time" className={inputCls} onChange={handle} />
+                <label className={labelCls}>End Date</label>
+                <input name="endDate" type="date" className={inputCls} onChange={handle} />
+              </div>
+              <div>
+                <label className={labelCls}>In Time</label>
+                <input name="inTime" type="time" className={inputCls} onChange={handle} />
+              </div>
+              <div>
+                <label className={labelCls}>Out Time</label>
+                <input name="outTime" type="time" className={inputCls} onChange={handle} />
               </div>
             </div>
 
@@ -113,7 +150,10 @@ export default function Hero() {
               <input name="mobile" placeholder="Contact Number" className={inputCls} onChange={handle} />
             </div>
 
-            <button className="w-full bg-slate-900 text-white font-bold text-sm tracking-widest uppercase py-5 rounded-lg hover:bg-amber-600 transition-all duration-300 shadow-lg active:scale-[0.98]">
+            <button
+              type="submit"
+              className="w-full bg-slate-900 text-white font-bold text-sm tracking-widest uppercase py-5 rounded-lg hover:bg-amber-600 transition-all duration-300 shadow-lg active:scale-[0.98]"
+            >
               Confirm Booking Request
             </button>
             

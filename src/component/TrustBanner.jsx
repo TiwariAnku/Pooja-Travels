@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // TrustBanner.jsx
 import React from 'react';
 import { motion } from 'framer-motion';

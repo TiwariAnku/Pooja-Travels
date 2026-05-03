@@ -18,6 +18,14 @@ export default function PremiumFooter() {
     return <LucideIcon size={size} className={className} />;
   };
 
+  const mapsUrl = "https://maps.google.com/?q=Office+No.+194,+Vishnu+Nagar+Society,+L.U.+Gadkari+Marg,+Chembur,+Mumbai+400074";
+
+  const socialLinks = [
+    { icon: 'Instagram', href: 'https://www.instagram.com' },
+    { icon: 'Send',      href: 'https://t.me/poojatravels' },
+    { icon: 'Globe',     href: 'https://poojatravels.com' },
+  ];
+
   return (
     <footer className="bg-[#0f1115] border-t border-white/5 pt-20 pb-10 px-6 lg:px-12 relative overflow-hidden text-white font-sans">
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-[120px] pointer-events-none" />
@@ -25,11 +33,12 @@ export default function PremiumFooter() {
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
           
-          {/* Brand - Updated to match Official Logo colors */}
+          {/* Brand */}
           <div>
             <div className="text-3xl font-bold tracking-tighter mb-2">
-              <span className="text-[#0088cc]">POOJA</span>
-              <span className="text-white ml-2">TRAVELS</span>
+              <span className="font-playfair text-xl sm:text-2xl font-black tracking-tight text-white group-hover:text-amber-500 transition-colors">
+                POOJA<span className="text-amber-500 group-hover:text-white">TRAVELS</span>
+              </span>
             </div>
             <div className="text-[10px] font-black tracking-[0.3em] uppercase text-amber-500 mb-6">
               Car Rental Service
@@ -39,9 +48,15 @@ export default function PremiumFooter() {
               Reliable service based in Mumbai.
             </p>
             <div className="flex gap-4">
-              {['Instagram', 'Send', 'Globe'].map((iconName) => (
-                <a key={iconName} href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-amber-500 hover:border-amber-500 transition-all duration-300">
-                  <Icon name={iconName} size={18} />
+              {socialLinks.map(({ icon, href }) => (
+                <a
+                  key={icon}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-amber-500 hover:border-amber-500 transition-all duration-300"
+                >
+                  <Icon name={icon} size={18} />
                 </a>
               ))}
             </div>
@@ -66,18 +81,27 @@ export default function PremiumFooter() {
             </div>
           ))}
 
-          {/* Contact - Updated with Details from Image */}
+          {/* Contact */}
           <div>
             <h4 className="text-white text-[10px] font-black tracking-[0.3em] uppercase mb-8 border-l-2 border-amber-500 pl-4">
               Contact Office
             </h4>
             <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <Icon name="MapPin" className="text-amber-500 shrink-0 mt-1" size={18} />
-                <span className="text-slate-300 text-sm leading-relaxed">
-                  Room No. 194, Vishnu Nagar Society, L.U. Gadkari Marg, Chembur, Mumbai - 400074
+
+              {/* Location → Google Maps */}
+              <a
+                href={mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-4 hover:text-amber-400 transition-colors group"
+              >
+                <Icon name="MapPin" className="text-amber-500 shrink-0 mt-1 group-hover:text-amber-400" size={18} />
+                <span className="text-slate-300 text-sm leading-relaxed group-hover:text-amber-400">
+                  Office No. 194, Vishnu Nagar Society, L.U. Gadkari Marg, Chembur, Mumbai - 400074
                 </span>
-              </div>
+              </a>
+
+              {/* Phone → Direct Call */}
               <div className="flex items-start gap-4">
                 <Icon name="Phone" className="text-amber-500 shrink-0 mt-1" size={18} />
                 <div className="flex flex-col gap-1 text-slate-300 text-sm font-medium">
@@ -86,12 +110,18 @@ export default function PremiumFooter() {
                   <a href="tel:+919594935086" className="hover:text-amber-500 transition-colors">+91 95949 35086</a>
                 </div>
               </div>
+
+              {/* Email → Gmail */}
               <div className="flex items-center gap-4">
                 <Icon name="Mail" className="text-amber-500" size={18} />
-                <a href="mailto:poojatravels111@gmail.com" className="text-slate-300 text-sm hover:text-amber-500 transition-colors">
+                <a
+                  href="mailto:poojatravels111@gmail.com"
+                  className="text-slate-300 text-sm hover:text-amber-500 transition-colors"
+                >
                   poojatravels111@gmail.com
                 </a>
               </div>
+
             </div>
           </div>
         </div>
