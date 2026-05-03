@@ -19,32 +19,42 @@ export default function Hero() {
 `POOJA TRAVELS
 Premium Car Rental Service
 GSTIN: 27AICPT7468H1ZP
-______________________________
+________________________________
 
 CAB BOOKING FORMAT
 
-Emp Name          : ${form.name || 'N/A'}
-Cell No.          : ${form.mobile || 'N/A'}
-Pick Up City
-& Address         : ${form.pickup || 'N/A'}
-Date & Time
-of Pick up        : ${form.startDate || 'N/A'} at ${form.inTime || 'N/A'}
-Drop City
-& Address         : N/A
-Date & Time
-of drop           : ${form.endDate || 'N/A'} at ${form.outTime || 'N/A'}
-Car Type          : ${form.carType}
-Remarks           : N/A
+Sr.No.  Details
+------  ------------------------------------------
+2       Emp Name                  : ${form.name || 'N/A'}
+9       Cell No.                  : ${form.mobile || 'N/A'}
+10      Pick Up City & Address    : ${form.pickup || 'N/A'}
+11      Date & Time of Pick up    : ${form.startDate || 'N/A'} at ${form.inTime || 'N/A'}
+12      Drop City & Address       : ${form.endDate || 'N/A'}
+13      Date & Time of drop       : ${form.outTime || 'N/A'}
+14      Car Type                  : ${form.carType}
+15      Any Other Remarks /
+        Specific Requirements     : ${form.email || 'N/A'}
 
-______________________________
+________________________________
 Chembur, Mumbai - 400 074
 Contact : 9594917750 / 9702909087
 
 Kindly confirm the booking at the earliest.
 Thank you for choosing Pooja Travels.`
 
-    const encoded = encodeURIComponent(message)
-    window.open(`https://wa.me/919594917750?text=${encoded}`, '_blank')
+    // 1. Open WhatsApp
+    const waEncoded = encodeURIComponent(message)
+    window.open(`https://wa.me/919594917750?text=${waEncoded}`, '_blank')
+
+    // 2. Open Email (mailto) with same message
+    const emailSubject = `Cab Booking Request - ${form.name || 'Guest'} - ${form.startDate || 'N/A'}`
+    const mailEncoded = encodeURIComponent(message)
+    const mailtoLink = `mailto:poojatravels111@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${mailEncoded}`
+    
+    // slight delay so browser doesn't block both popups at once
+    setTimeout(() => {
+      window.open(mailtoLink, '_blank')
+    }, 500)
   }
 
   return (
@@ -102,7 +112,7 @@ Thank you for choosing Pooja Travels.`
           </div>
         </div>
 
-        {/* RIGHT: THE BOOKING FORM — compact horizontal layout */}
+        {/* RIGHT: THE BOOKING FORM */}
         <div className="lg:col-span-6 bg-white p-6 rounded-2xl shadow-2xl border border-slate-100">
           <div className="mb-4">
             <h2 className="text-xl font-bold text-slate-900">Cab Booking Format</h2>
@@ -172,11 +182,14 @@ Thank you for choosing Pooja Travels.`
               <input name="email" placeholder="Cab at disposal / 1st pick / 2nd pick up person details, cell no. etc." className={inputCls} onChange={handle} />
             </div>
 
+            {/* SUBMIT BUTTON — shows both icons */}
             <button
               type="submit"
-              className="w-full bg-slate-900 text-white font-bold text-sm tracking-widest uppercase py-4 rounded-lg hover:bg-amber-600 transition-all duration-300 shadow-lg active:scale-[0.98]"
+              className="w-full bg-slate-900 text-white font-bold text-sm tracking-widest uppercase py-4 rounded-lg hover:bg-amber-600 transition-all duration-300 shadow-lg active:scale-[0.98] flex items-center justify-center gap-3"
             >
-              Send Booking via WhatsApp
+              <span>📲</span>
+              <span>Send Booking · WhatsApp & Email</span>
+              <span>✉️</span>
             </button>
             
             <div className="flex justify-between items-center px-1">
