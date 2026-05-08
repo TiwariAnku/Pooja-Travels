@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 const navLinks = [
-  { name: 'Home', href: '#' },
-  { name: 'Fleet', href: '#fleet' },
-  { name: 'Services', href: '#services' },
-  { name: 'About', href: '#about' },
-  { name: 'Contact', href: '#contact' }
+  { name: 'Home', href: '/' },
+  { name: 'Fleet', href: '/fleet' },
+  { name: 'Services', href: '/service' },
+  { name: 'About', href: '/#about' },
+  { name: 'Contact', href: '/#contact' }
 ]
 
 export default function Navbar() {
@@ -24,7 +25,7 @@ export default function Navbar() {
         ? 'py-3 bg-slate-900/95 backdrop-blur-xl border-b border-white/5 shadow-2xl' 
         : 'py-5 bg-transparent'
     }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 relative flex items-center justify-between">
 
         {/* LOGO */}
         <div className="flex flex-col leading-none group cursor-pointer shrink-0">
@@ -37,22 +38,24 @@ export default function Navbar() {
         </div>
 
         {/* DESKTOP NAVIGATION */}
-        <ul className="hidden lg:flex items-center gap-8 xl:gap-10">
-          {navLinks.map(link => (
-            <li key={link.name} className="relative group">
-              <a
-                href={link.href}
-                className="text-white/70 hover:text-white text-[11px] font-bold tracking-[0.2em] uppercase transition-all duration-300"
-              >
-                {link.name}
-              </a>
-              <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-amber-500 transition-all duration-300 group-hover:w-full" />
-            </li>
-          ))}
-        </ul>
+        <div className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <ul className="flex items-center gap-8 xl:gap-10">
+            {navLinks.map(link => (
+              <li key={link.name} className="relative group">
+                <Link
+                  to={link.href}
+                  className="text-white/70 hover:text-white text-[11px] font-bold tracking-[0.2em] uppercase transition-all duration-300"
+                >
+                  {link.name}
+                </Link>
+                <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-amber-500 transition-all duration-300 group-hover:w-full" />
+              </li>
+            ))}
+          </ul>
+        </div>
 
         {/* ACTION AREA */}
-        <div className="flex items-center gap-4 sm:gap-8">
+        <div className="flex items-center justify-end gap-4 sm:gap-8">
           
           {/* Desktop Contact Info - Refined with border */}
           <div className="hidden xl:flex flex-col items-end border-r border-white/10 pr-6">
@@ -113,14 +116,14 @@ export default function Navbar() {
       }`}>
         <div className="px-6 py-8 flex flex-col gap-6">
           {navLinks.map(link => (
-            <a
+            <Link
               key={link.name}
-              href={link.href}
+              to={link.href}
               onClick={() => setMenuOpen(false)}
               className="text-white text-lg font-bold tracking-[0.1em] uppercase border-b border-white/5 pb-4 active:text-amber-500"
             >
               {link.name}
-            </a>
+            </Link>
           ))}
           <div className="pt-2 flex flex-col gap-2">
              <span className="text-amber-500 font-bold text-xs uppercase tracking-tighter">Direct Support:</span>
