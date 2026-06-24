@@ -19,10 +19,31 @@ export default function Hero() {
   const handleBooking = async (e) => {
     e.preventDefault()
     setLoading(true)
-    setStatus(null)
+    setStatus('processing')
+
+    // 1. Prepare the WhatsApp message layout
+    const messageText = `*NEW CAB BOOKING REQUEST*
+----------------------------------
+*Employee Name:* ${form.name}
+*Cell No:* ${form.mobile}
+*Email:* ${form.employeeEmail}
+*Car Type:* ${form.carType}
+
+*Pick Up Location:* ${form.pickup}
+*Pick Up Schedule:* ${form.startDate} at ${form.inTime}
+
+*Drop Location:* ${form.dropAddress}
+*Drop Date:* ${form.dropDate}
+
+*Remarks:* ${form.remarks || 'None'}
+----------------------------------`;
+
+    const encodedMessage = encodeURIComponent(messageText)
+    const targetWhatsAppNumber = '919594917750'
 
     try {
-      const res = await fetch('http://localhost:3000/api/booking', {
+      // 2. Fire the email payload request to your backend api for tracking proof
+      await fetch('http://localhost:3000/api/booking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -37,24 +58,21 @@ export default function Hero() {
           remarks:        form.remarks,
         })
       })
-
-      const data = await res.json()
-      if (data.success) {
-        setStatus('success')
-        setForm({
-          carType: 'Innova Crysta',
-          name: '', mobile: '', employeeEmail: '',
-          pickup: '', startDate: '', inTime: '',
-          dropAddress: '', dropDate: '', remarks: ''
-        })
-      } else {
-        setStatus('error')
-      }
     } catch (err) {
-      console.error(err)
-      setStatus('error')
+      console.warn("Backend proof email failed, opening WhatsApp anyway:", err)
     } finally {
+      // 3. Reset form data parameters
+      setForm({
+        carType: 'Innova Crysta',
+        name: '', mobile: '', employeeEmail: '',
+        pickup: '', startDate: '', inTime: '',
+        dropAddress: '', dropDate: '', remarks: ''
+      })
       setLoading(false)
+      setStatus(null)
+
+      // 4. Open WhatsApp cleanly inside a separate new window tab browser frame
+      window.open(`https://wa.me/${targetWhatsAppNumber}?text=${encodedMessage}`, '_blank')
     }
   }
 
@@ -114,14 +132,9 @@ export default function Hero() {
             <p className="text-xs text-slate-500">GST Registered · GSTIN: 27AICPT7468H1ZP</p>
           </div>
 
-          {status === 'success' && (
-            <div className="mb-4 bg-green-50 border border-green-200 text-green-800 text-sm px-4 py-3 rounded-lg">
-              ✅ Booking confirmed! Emails sent successfully.
-            </div>
-          )}
-          {status === 'error' && (
-            <div className="mb-4 bg-red-50 border border-red-200 text-red-800 text-sm px-4 py-3 rounded-lg">
-              ❌ Something went wrong. Please try again.
+          {status === 'processing' && (
+            <div className="mb-4 bg-amber-50 border border-amber-200 text-amber-800 text-sm px-4 py-3 rounded-lg animate-pulse">
+              📬 Processing email log & launching WhatsApp tab...
             </div>
           )}
 
@@ -219,10 +232,10 @@ export default function Hero() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
                   </svg>
-                  <span>Sending...</span>
+                  <span>Processing...</span>
                 </>
               ) : (
-                <span>🚖 Send Booking</span>
+                <span>🚖 Confirm & Send Booking</span>
               )}
             </button>
 
