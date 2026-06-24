@@ -5,7 +5,7 @@ export default function Hero() {
     carType: 'Innova Crysta',
     name: '', mobile: '', employeeEmail: '',
     pickup: '', startDate: '', inTime: '',
-    dropAddress: '', dropDate: '',
+    dropAddress: '', dropDate: '', outTime: '', // Added outTime here
     remarks: ''
   })
   const [loading, setLoading] = useState(false)
@@ -21,7 +21,7 @@ export default function Hero() {
     setLoading(true)
     setStatus('processing')
 
-    // 1. Prepare the WhatsApp message layout
+    // 1. Prepare the updated WhatsApp message layout with return timings
     const messageText = `*NEW CAB BOOKING REQUEST*
 ----------------------------------
 *Employee Name:* ${form.name}
@@ -33,7 +33,7 @@ export default function Hero() {
 *Pick Up Schedule:* ${form.startDate} at ${form.inTime}
 
 *Drop Location:* ${form.dropAddress}
-*Drop Date:* ${form.dropDate}
+*Drop Schedule:* ${form.dropDate}${form.outTime ? ` at ${form.outTime}` : ''}
 
 *Remarks:* ${form.remarks || 'None'}
 ----------------------------------`;
@@ -47,13 +47,13 @@ export default function Hero() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          empName:        form.name,
-          cellNo:         form.mobile,
+          empName:         form.name,
+          cellNo:          form.mobile,
           employeeEmail:  form.employeeEmail,
           pickupAddress:  form.pickup,
           pickupDateTime: `${form.startDate} at ${form.inTime}`,
           dropAddress:    form.dropAddress,
-          dropDate:       form.dropDate,
+          dropDateTime:   `${form.dropDate} at ${form.outTime}`, // Track outTime on server too
           carType:        form.carType,
           remarks:        form.remarks,
         })
@@ -61,12 +61,13 @@ export default function Hero() {
     } catch (err) {
       console.warn("Backend proof email failed, opening WhatsApp anyway:", err)
     } finally {
-      // 3. Reset form data parameters
+      // 3. Reset form data parameters completely
       setForm({
         carType: 'Innova Crysta',
         name: '', mobile: '', employeeEmail: '',
         pickup: '', startDate: '', inTime: '',
-        dropAddress: '', dropDate: '', remarks: ''
+        dropAddress: '', dropDate: '', outTime: '',
+        remarks: ''
       })
       setLoading(false)
       setStatus(null)
@@ -192,7 +193,7 @@ export default function Hero() {
                 className={inputCls} onChange={handle} required />
             </div>
 
-            {/* Drop Date + Car Type */}
+            {/* Drop Date + Out Timing */}
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className={labelCls}>Date of Drop</label>
@@ -200,16 +201,23 @@ export default function Hero() {
                   type="date" className={inputCls} onChange={handle} required />
               </div>
               <div>
-                <label className={labelCls}>Car Type</label>
-                <select name="carType" value={form.carType} className={inputCls} onChange={handle}>
-                  <option>Innova Crysta</option>
-                  <option>Innova</option>
-                  <option>Etios</option>
-                  <option>D'zire</option>
-                  <option>Prime Sedan</option>
-                  <option>Executive SUV</option>
-                </select>
+                <label className={labelCls}>Out Time (Drop Time)</label>
+                <input name="outTime" value={form.outTime}
+                  type="time" className={inputCls} onChange={handle} required />
               </div>
+            </div>
+
+            {/* Car Type Selector */}
+            <div>
+              <label className={labelCls}>Car Type</label>
+              <select name="carType" value={form.carType} className={inputCls} onChange={handle}>
+                <option>Innova Crysta</option>
+                <option>Innova</option>
+                <option>Etios</option>
+                <option>D'zire</option>
+                <option>Prime Sedan</option>
+                <option>Executive SUV</option>
+              </select>
             </div>
 
             {/* Remarks */}

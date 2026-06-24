@@ -1,3 +1,5 @@
+import { useState, useEffect, useRef } from "react"
+
 const services = [
   {
     id: 1,
@@ -126,11 +128,19 @@ const icons = {
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
     </svg>
   ),
+  menu: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  ),
+  close: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  )
 }
 
-import { useState, useEffect, useRef } from "react"
-
-function useInView(threshold = 0.15) {
+function useInView(threshold = 0.1) {
   const ref = useRef(null)
   const [inView, setInView] = useState(false)
   useEffect(() => {
@@ -153,96 +163,70 @@ function ServiceCard({ service, index }) {
       onMouseLeave={() => setHovered(false)}
       style={{
         opacity: inView ? 1 : 0,
-        transform: inView ? 'translateY(0)' : 'translateY(40px)',
-        transition: `opacity 0.6s ease ${index * 100}ms, transform 0.6s ease ${index * 100}ms, all 0.5s ease ${index * 80}ms`,
+        transform: inView ? 'translateY(0)' : 'translateY(30px)',
+        transition: `opacity 0.6s ease ${index * 80}ms, transform 0.6s ease ${index * 80}ms, all 0.4s ease`,
         background: hovered ? `linear-gradient(135deg, rgba(255,255,255,0.05) 0%, ${a.glow} 100%)` : 'rgba(255,255,255,0.03)',
         border: `1px solid ${hovered ? a.border : 'rgba(255,255,255,0.07)'}`,
         borderRadius: 20,
         overflow: 'hidden',
         position: 'relative',
         cursor: 'pointer',
-        boxShadow: hovered ? `0 24px 64px rgba(0,0,0,0.4), 0 0 40px ${a.glow}` : '0 4px 20px rgba(0,0,0,0.2)',
+        boxShadow: hovered ? `0 20px 48px rgba(0,0,0,0.4), 0 0 30px ${a.glow}` : '0 4px 20px rgba(0,0,0,0.2)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between'
       }}
     >
-      {/* Top accent bar */}
-      <div style={{
-        position: 'absolute', top: 0, left: 0, right: 0, height: 2,
-        background: a.color,
-        opacity: hovered ? 1 : 0,
-        transition: 'opacity 0.4s',
-      }} />
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: a.color, opacity: hovered ? 1 : 0, transition: 'opacity 0.4s' }} />
 
-      {/* Corner stat */}
-      <div style={{
-        position: 'absolute', top: 20, right: 20,
-        textAlign: 'right',
-      }}>
+      <div style={{ position: 'absolute', top: 24, right: 24, textAlign: 'right' }}>
         <div style={{ color: a.color, fontSize: 22, fontWeight: 900, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: '0.05em', lineHeight: 1 }}>{service.stat}</div>
         <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.15em', marginTop: 2 }}>{service.statLabel}</div>
       </div>
 
-      <div style={{ padding: '28px 28px 24px' }}>
-        {/* Icon */}
-        <div style={{
-          width: 52, height: 52,
-          background: a.bg,
-          border: `1px solid ${a.border}`,
-          borderRadius: 14,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          marginBottom: 20,
-          color: a.color,
-          transform: hovered ? 'scale(1.08) rotate(-3deg)' : 'scale(1)',
-          transition: 'transform 0.4s ease',
-        }}>
-          <div style={{ width: 24, height: 24 }}>{icons[service.icon]}</div>
+      <div style={{ padding: '28px 24px 24px', display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <div>
+          <div style={{
+            width: 52, height: 52, background: a.bg, border: `1px solid ${a.border}`, borderRadius: 14,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20, color: a.color,
+            transform: hovered ? 'scale(1.05) rotate(-2deg)' : 'scale(1)', transition: 'transform 0.3s ease',
+          }}>
+            <div style={{ width: 24, height: 24 }}>{icons[service.icon]}</div>
+          </div>
+
+          <div style={{ marginBottom: 6 }}>
+            <h3 style={{ color: '#fff', fontSize: 22, fontWeight: 900, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: '0.04em', lineHeight: 1 }}>{service.title}</h3>
+            <p style={{ color: a.color, fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', marginTop: 4 }}>{service.subtitle}</p>
+          </div>
+
+          <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '16px 0' }} />
+          <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13, lineHeight: 1.7, marginBottom: 20 }}>{service.desc}</p>
         </div>
 
-        {/* Title */}
-        <div style={{ marginBottom: 6 }}>
-          <h3 style={{ color: '#fff', fontSize: 22, fontWeight: 900, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: '0.04em', lineHeight: 1 }}>{service.title}</h3>
-          <p style={{ color: a.color, fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', marginTop: 4 }}>{service.subtitle}</p>
+        <div style={{ marginTop: 'auto' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 24 }}>
+            {service.features.map(f => (
+              <span key={f} style={{
+                display: 'inline-flex', alignItems: 'center', gap: 5, background: a.bg, border: `1px solid ${a.border}`,
+                color: a.color, fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', padding: '4px 8px', borderRadius: 6,
+              }}>
+                <span style={{ width: 10, height: 10, display: 'inline-flex' }}>{icons.check}</span>
+                {f}
+              </span>
+            ))}
+          </div>
+
+          <button
+            onClick={() => window.open(`https://wa.me/919594917750?text=${encodeURIComponent(`Hi, I'm interested in your ${service.title} service. Please share details.`)}`, '_blank')}
+            style={{
+              width: '100%', padding: '12px 0', borderRadius: 12, fontSize: 10, fontWeight: 900, letterSpacing: '0.2em', textTransform: 'uppercase',
+              border: `1px solid ${hovered ? a.color : 'rgba(255,255,255,0.1)'}`, background: hovered ? a.color : 'rgba(255,255,255,0.04)',
+              color: hovered ? '#0a0d14' : 'rgba(255,255,255,0.55)', cursor: 'pointer', transition: 'all 0.3s ease',
+            }}
+          >
+            Enquire Now →
+          </button>
         </div>
-
-        {/* Divider */}
-        <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '16px 0' }} />
-
-        {/* Description */}
-        <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13, lineHeight: 1.75, marginBottom: 20 }}>{service.desc}</p>
-
-        {/* Features */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 24 }}>
-          {service.features.map(f => (
-            <span key={f} style={{
-              display: 'flex', alignItems: 'center', gap: 5,
-              background: a.bg,
-              border: `1px solid ${a.border}`,
-              color: a.color,
-              fontSize: 9, fontWeight: 700,
-              textTransform: 'uppercase', letterSpacing: '0.15em',
-              padding: '4px 10px', borderRadius: 6,
-            }}>
-              <span style={{ width: 10, height: 10, display: 'inline-flex' }}>{icons.check}</span>
-              {f}
-            </span>
-          ))}
-        </div>
-
-        {/* CTA */}
-        <button
-          onClick={() => window.open(`https://wa.me/919594917750?text=${encodeURIComponent(`Hi, I'm interested in your ${service.title} service. Please share details.`)}`, '_blank')}
-          style={{
-            width: '100%', padding: '12px 0',
-            borderRadius: 12,
-            fontSize: 10, fontWeight: 900, letterSpacing: '0.2em', textTransform: 'uppercase',
-            border: `1px solid ${hovered ? a.color : 'rgba(255,255,255,0.1)'}`,
-            background: hovered ? a.color : 'rgba(255,255,255,0.04)',
-            color: hovered ? '#0a0d14' : 'rgba(255,255,255,0.55)',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-          }}
-        >
-          Enquire Now →
-        </button>
       </div>
     </div>
   )
@@ -253,28 +237,27 @@ function WhyItem({ icon, title, desc, delay }) {
   return (
     <div ref={ref} style={{
       opacity: inView ? 1 : 0,
-      transform: inView ? 'translateY(0)' : 'translateY(30px)',
+      transform: inView ? 'translateY(0)' : 'translateY(20px)',
       transition: `all 0.6s ease ${delay}ms`,
       display: 'flex', gap: 16, alignItems: 'flex-start',
     }}>
       <div style={{
-        width: 44, height: 44, flexShrink: 0,
-        background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.25)',
-        borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color: '#f59e0b',
+        width: 44, height: 44, flexShrink: 0, background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.25)',
+        borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f59e0b',
       }}>
         <div style={{ width: 20, height: 20 }}>{icon}</div>
       </div>
       <div>
         <p style={{ color: '#fff', fontWeight: 700, fontSize: 15, marginBottom: 4 }}>{title}</p>
-        <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12, lineHeight: 1.7 }}>{desc}</p>
+        <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12, lineHeight: 1.6 }}>{desc}</p>
       </div>
     </div>
   )
 }
 
 export default function Services() {
-  const [heroRef, heroIn] = useInView(0.1)
+  const [heroRef, heroIn] = useInView(0.05)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const whyItems = [
     { icon: icons.check, title: 'GST Registered Business', desc: 'GSTIN: 27AICPT7468H1ZP — proper invoices for every booking.' },
@@ -284,179 +267,205 @@ export default function Services() {
   ]
 
   return (
-    <section id="services" style={{
-      background: '#0f1729 ', minHeight: '100vh',
-      fontFamily: "'DM Sans', sans-serif",
-      position: 'relative', overflow: 'hidden',
-    }}>
+    <div style={{ background: '#0f1729', minHeight: '100vh', fontFamily: "'DM Sans', sans-serif", color: '#fff' }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,700;0,900;1,400&display=swap');
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        button { font-family: inherit; }
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700;900&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
+        button, a { font-family: inherit; transition: all 0.3s ease; }
+        
+        /* Responsive Grid & Flex Rules */
+        .pt-grid-container {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+          gap: 24px;
+          margin-bottom: 80px;
+        }
+        .pt-why-section {
+          border: 1px solid rgba(255,255,255,0.07);
+          background: 'rgba(255,255,255,0.02)';
+          border-radius: 24px;
+          padding: 40px;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 48px;
+          align-items: center;
+        }
+        .pt-stat-bar {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-top: 48px;
+        }
+        .pt-cta-box {
+          margin-top: 40px;
+          background: linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(245,158,11,0.02) 100%);
+          border: 1px solid rgba(245,158,11,0.2);
+          border-radius: 20px;
+          padding: 36px 40px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 24px;
+        }
+        .pt-nav-links { display: flex; gap: 32px; align-items: center; }
+        .pt-menu-btn { display: none; }
+
+        /* Media Queries for Mobile responsiveness */
+        @media (max-width: 991px) {
+          .pt-why-section { grid-template-columns: 1fr; gap: 40px; padding: 32px 24px; }
+          .pt-cta-box { flex-direction: column; text-align: center; padding: 32px 24px; }
+          .pt-cta-box div { display: flex; flexDirection: column; align-items: center; }
+        }
+        
+        @media (max-width: 768px) {
+          .pt-nav-links { display: none; }
+          .pt-menu-btn { display: block; }
+          .pt-stat-bar { flex-direction: column; gap: 24px; }
+          .pt-stat-divider { display: none !important; }
+          .pt-stat-item { padding: 0 !important; }
+        }
       `}</style>
 
-      {/* Dot texture */}
-      <div style={{
-        position: 'absolute', inset: 0, opacity: 0.03, pointerEvents: 'none',
-        backgroundImage: 'radial-gradient(circle, #f59e0b 1px, transparent 1px)',
-        backgroundSize: '40px 40px',
-      }} />
+      {/* ── STICKY NAVBAR ── */}
+      <nav style={{
+        position: 'fixed', top: 0, left: 0, right: 0, height: 72,
+        background: 'rgba(15, 23, 41, 0.85)', backdropFilter: 'blur(12px)',
+        borderBottom: '1px solid rgba(255,255,255,0.05)', zIndex: 1000,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px'
+      }}>
+        <div style={{ maxWidth: 1200, width: '100%', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          {/* Logo */}
+          <a href="#" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column' }}>
+            <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 28, color: '#fff', letterSpacing: '0.05em', lineHeight: 1 }}>POOJA <span style={{ color: '#f59e0b' }}>TRAVELS</span></span>
+            <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.2em', marginTop: 2 }}>Premium Logistics</span>
+          </a>
 
-      {/* Diagonal gold strip */}
-      <div style={{
-        position: 'absolute', top: 0, right: -200, width: 600, height: 600,
-        background: 'radial-gradient(ellipse, rgba(245,158,11,0.06) 0%, transparent 70%)',
-        pointerEvents: 'none',
-      }} />
-
-      {/* Top line */}
-      <div style={{
-        position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
-        width: 800, height: 1,
-        background: 'linear-gradient(90deg, transparent, rgba(245,158,11,0.3), transparent)',
-      }} />
-
-<div style={{ maxWidth: 1200, margin: '0 auto', padding: '112px 24px 80px',position: 'relative' }}>
-
-        {/* ── HERO HEADER ── */}
-        <div ref={heroRef} style={{ textAlign: 'center', marginBottom: 80 }}>
-          {/* Eyebrow */}
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 12, marginBottom: 20,
-            opacity: heroIn ? 1 : 0, transform: heroIn ? 'translateY(0)' : 'translateY(20px)',
-            transition: 'all 0.7s ease',
-          }}>
-            <div style={{ width: 40, height: 1, background: '#f59e0b' }} />
-            <span style={{ color: '#f59e0b', fontSize: 10, fontWeight: 900, letterSpacing: '0.4em', textTransform: 'uppercase' }}>Service Portfolio</span>
-            <div style={{ width: 40, height: 1, background: '#f59e0b' }} />
-          </div>
-
-          {/* Headline */}
-          <h1 style={{
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: 'clamp(56px, 10vw, 100px)',
-            lineHeight: 0.95, letterSpacing: '0.02em',
-            color: '#fff', marginBottom: 16,
-            opacity: heroIn ? 1 : 0, transform: heroIn ? 'translateY(0)' : 'translateY(30px)',
-            transition: 'all 0.7s ease 0.1s',
-          }}>
-            Integrated <span style={{ color: '#f59e0b', fontStyle: 'italic' }}>Logistics</span> Solutions
-          </h1>
-
-          <p style={{
-            color: 'rgba(255,255,255,0.35)', fontSize: 11,
-            fontWeight: 700, letterSpacing: '0.35em', textTransform: 'uppercase',
-            opacity: heroIn ? 1 : 0, transform: heroIn ? 'translateY(0)' : 'translateY(20px)',
-            transition: 'all 0.7s ease 0.2s',
-          }}>
-            Professional Excellence in Transit Since 2008
-          </p>
-
-          {/* Stat bar */}
-          <div style={{
-            display: 'flex', justifyContent: 'center', alignItems: 'center',
-            gap: 0, marginTop: 48, flexWrap: 'wrap',
-            opacity: heroIn ? 1 : 0, transition: 'all 0.7s ease 0.35s',
-          }}>
-            {[['10,000+', 'Happy Clients'], ['50+', 'Vehicles'], ['Pan India', 'Coverage'], ['24/7', 'Support']].map(([num, lbl], i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
-                <div style={{ padding: '0 32px', textAlign: 'center' }}>
-                  <div style={{ color: '#f59e0b', fontSize: 28, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: '0.05em' }}>{num}</div>
-                  <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.2em', marginTop: 2 }}>{lbl}</div>
-                </div>
-                {i < 3 && <div style={{ width: 1, height: 36, background: 'rgba(255,255,255,0.1)' }} />}
-              </div>
+          {/* Desktop Nav Links */}
+          <div className="pt-nav-links">
+            {['Services', 'Why Choose Us', 'Fleet'].map((link) => (
+              <a key={link} href={`#${link.toLowerCase().replace(/\s+/g, '-')}`} style={{ color: 'rgba(255,255,255,0.7)', textDecoration: 'none', fontSize: 13, fontWeight: 500, letterSpacing: '0.05em' }}>{link}</a>
             ))}
+            <a href="tel:9594917750" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '8px 16px', borderRadius: 10, fontSize: 12, fontWeight: 700, textDecoration: 'none' }}>Call Support</a>
           </div>
+
+          {/* Mobile Menu Toggle Button */}
+          <button className="pt-menu-btn" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', width: 24, height: 24 }}>
+            {mobileMenuOpen ? icons.close : icons.menu}
+          </button>
         </div>
+      </nav>
 
-        {/* ── SERVICE GRID ── */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-          gap: 20, marginBottom: 80,
-        }}>
-          {services.map((s, i) => <ServiceCard key={s.id} service={s} index={i} />)}
+      {/* Mobile Drawer Overlay */}
+      <div style={{
+        position: 'fixed', top: 72, left: 0, right: 0, bottom: 0, background: '#0f1729', zIndex: 999,
+        padding: 32, display: mobileMenuOpen ? 'block' : 'none', transform: mobileMenuOpen ? 'translateY(0)' : 'translateY(-100%)', transition: 'all 0.4s ease'
+      }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24, alignItems: 'center', marginTop: 40 }}>
+          {['Services', 'Why Choose Us', 'Fleet'].map((link) => (
+            <a key={link} onClick={() => setMobileMenuOpen(false)} href={`#${link.toLowerCase().replace(/\s+/g, '-')}`} style={{ color: '#fff', textDecoration: 'none', fontSize: 20, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: '0.1em' }}>{link}</a>
+          ))}
+          <a href="tel:9594917750" style={{ background: '#f59e0b', color: '#0a0d14', width: '100%', textAlign: 'center', padding: '12px', borderRadius: 12, fontWeight: 700, textDecoration: 'none', marginTop: 20 }}>Call Now</a>
         </div>
-
-        {/* ── WHY POOJA TRAVELS ── */}
-        <div style={{
-          border: '1px solid rgba(255,255,255,0.07)',
-          background: 'rgba(255,255,255,0.02)',
-          borderRadius: 24, padding: '48px',
-          display: 'grid', gridTemplateColumns: '1fr 1fr',
-          gap: 48, alignItems: 'center',
-        }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-              <div style={{ width: 32, height: 1, background: '#f59e0b' }} />
-              <span style={{ color: '#f59e0b', fontSize: 10, fontWeight: 900, letterSpacing: '0.4em', textTransform: 'uppercase' }}>Why Choose Us</span>
-            </div>
-            <h2 style={{
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: 52, lineHeight: 1, letterSpacing: '0.02em', color: '#fff', marginBottom: 16,
-            }}>
-              Mumbai's Most<br /><span style={{ color: '#f59e0b' }}>Trusted</span> Fleet
-            </h2>
-            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13, lineHeight: 1.8, marginBottom: 28 }}>
-              From a single cab to a full corporate fleet — Pooja Travels delivers on every promise. Office No. 194, Vishnu Nagar Society, L.U. Gadkari Marg, Chembur, Mumbai-400 074.
-            </p>
-            <button
-              onClick={() => window.open('https://wa.me/919594917750?text=Hi%2C%20I%27d%20like%20to%20know%20more%20about%20your%20services', '_blank')}
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 10,
-                background: '#f59e0b', color: '#0a0d14',
-                fontSize: 10, fontWeight: 900, letterSpacing: '0.2em', textTransform: 'uppercase',
-                padding: '14px 28px', borderRadius: 12, border: 'none', cursor: 'pointer',
-              }}
-            >
-              <div style={{ width: 18, height: 18 }}>{icons.whatsapp}</div>
-              WhatsApp Us Now
-            </button>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
-            {whyItems.map((w, i) => <WhyItem key={i} {...w} delay={i * 100} />)}
-          </div>
-        </div>
-
-        {/* ── BOTTOM CTA ── */}
-        <div style={{
-          marginTop: 24,
-          background: 'linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(245,158,11,0.02) 100%)',
-          border: '1px solid rgba(245,158,11,0.2)',
-          borderRadius: 20, padding: '36px 40px',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          flexWrap: 'wrap', gap: 24,
-        }}>
-          <div>
-            <p style={{ color: '#fff', fontWeight: 800, fontSize: 18, marginBottom: 4 }}>Ready to book your ride?</p>
-            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13 }}>
-              📞 9594917750 &nbsp;/&nbsp; 9702909087 &nbsp;·&nbsp; ✉️ poojatravels111@gmail.com
-            </p>
-          </div>
-          <div style={{ display: 'flex', gap: 12 }}>
-            <a href="tel:9594917750" style={{
-              padding: '12px 24px', borderRadius: 12,
-              border: '1px solid rgba(255,255,255,0.15)',
-              background: 'rgba(255,255,255,0.05)',
-              color: '#fff', fontSize: 10, fontWeight: 900,
-              letterSpacing: '0.2em', textTransform: 'uppercase',
-              textDecoration: 'none', display: 'inline-block',
-            }}>Call Now</a>
-            <button
-              onClick={() => window.open('https://wa.me/919594917750', '_blank')}
-              style={{
-                padding: '12px 24px', borderRadius: 12,
-                background: '#f59e0b', border: 'none',
-                color: '#0a0d14', fontSize: 10, fontWeight: 900,
-                letterSpacing: '0.2em', textTransform: 'uppercase', cursor: 'pointer',
-              }}
-            >WhatsApp →</button>
-          </div>
-        </div>
-
       </div>
-    </section>
+
+      {/* ── MAIN CONTENT CONTAINER ── */}
+      <section id="services" style={{ position: 'relative', overflow: 'hidden', padding: '120px 24px 80px' }}>
+        {/* Background treatments */}
+        <div style={{ position: 'absolute', inset: 0, opacity: 0.02, pointerEvents: 'none', backgroundImage: 'radial-gradient(circle, #f59e0b 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+        <div style={{ position: 'absolute', top: 0, right: -200, width: 600, height: 600, background: 'radial-gradient(ellipse, rgba(245,158,11,0.05) 0%, transparent 70%)', pointerEvents: 'none' }} />
+
+        <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative' }}>
+          
+          {/* ── HERO HEADER ── */}
+          <div ref={heroRef} style={{ textAlign: 'center', marginBottom: 64 }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, marginBottom: 16, opacity: heroIn ? 1 : 0, transform: heroIn ? 'translateY(0)' : 'translateY(20px)', transition: 'all 0.6s ease' }}>
+              <div style={{ width: 32, height: 1, background: '#f59e0b' }} />
+              <span style={{ color: '#f59e0b', fontSize: 10, fontWeight: 900, letterSpacing: '0.3em', textTransform: 'uppercase' }}>Our Offerings</span>
+              <div style={{ width: 32, height: 1, background: '#f59e0b' }} />
+            </div>
+
+            <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(42px, 8vw, 84px)', lineHeight: 0.95, letterSpacing: '0.02em', color: '#fff', marginBottom: 16, opacity: heroIn ? 1 : 0, transform: heroIn ? 'translateY(0)' : 'translateY(20px)', transition: 'all 0.6s ease 0.1s' }}>
+              Integrated <span style={{ color: '#f59e0b', fontStyle: 'italic' }}>Logistics</span> Solutions
+            </h1>
+
+            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 11, fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', opacity: heroIn ? 1 : 0, transform: heroIn ? 'translateY(0)' : 'translateY(20px)', transition: 'all 0.6s ease 0.2s' }}>
+              Professional Excellence in Transit Since 2008
+            </p>
+
+            {/* Stat bar */}
+            <div className="pt-stat-bar" style={{ opacity: heroIn ? 1 : 0, transition: 'all 0.6s ease 0.3s' }}>
+              {[['10,000+', 'Happy Clients'], ['50+', 'Vehicles'], ['Pan India', 'Coverage'], ['24/7', 'Support']].map(([num, lbl], i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center' }} className="pt-stat-item">
+                  <div style={{ padding: '0 28px', textAlign: 'center' }} className="pt-stat-item">
+                    <div style={{ color: '#f59e0b', fontSize: 28, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: '0.05em' }}>{num}</div>
+                    <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.15em', marginTop: 2 }}>{lbl}</div>
+                  </div>
+                  {i < 3 && <div className="pt-stat-divider" style={{ width: 1, height: 32, background: 'rgba(255,255,255,0.1)' }} />}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── SERVICE GRID ── */}
+          <div className="pt-grid-container">
+            {services.map((s, i) => <ServiceCard key={s.id} service={s} index={i} />)}
+          </div>
+
+          {/* ── WHY POOJA TRAVELS ── */}
+          <div id="why-choose-us" className="pt-why-section">
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+                <div style={{ width: 32, height: 1, background: '#f59e0b' }} />
+                <span style={{ color: '#f59e0b', fontSize: 10, fontWeight: 900, letterSpacing: '0.3em', textTransform: 'uppercase' }}>Why Choose Us</span>
+              </div>
+              <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 44, lineHeight: 1, letterSpacing: '0.02em', color: '#fff', marginBottom: 16 }}>
+                Mumbai's Most<br /><span style={{ color: '#f59e0b' }}>Trusted</span> Fleet
+              </h2>
+              <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13, lineHeight: 1.7, marginBottom: 28 }}>
+                From a single cab to a full corporate fleet — Pooja Travels delivers on every promise. Office No. 194, Vishnu Nagar Society, L.U. Gadkari Marg, Chembur, Mumbai-400 074.
+              </p>
+              <button
+                onClick={() => window.open('https://wa.me/919594917750?text=Hi%2C%20I%27d%20like%20to%20know%20more%20about%20your%20services', '_blank')}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 10, background: '#f59e0b', color: '#0a0d14',
+                  fontSize: 10, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase', padding: '14px 24px', borderRadius: 12, border: 'none', cursor: 'pointer',
+                }}
+              >
+                <div style={{ width: 18, height: 18 }}>{icons.whatsapp}</div>
+                WhatsApp Us Now
+              </button>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+              {whyItems.map((w, i) => <WhyItem key={i} {...w} delay={i * 80} />)}
+            </div>
+          </div>
+
+          {/* ── BOTTOM CTA BAR ── */}
+          <div id="fleet" className="pt-cta-box">
+            <div>
+              <p style={{ color: '#fff', fontWeight: 800, fontSize: 18, marginBottom: 6 }}>Ready to book your ride?</p>
+              <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13, letterSpacing: '0.02em' }}>
+                📞 9594917750 &nbsp;/&nbsp; 9702909087 &nbsp;·&nbsp; ✉️ poojatravels111@gmail.com
+              </p>
+            </div>
+            <div style={{ display: 'flex', gap: 12, width: '100%', maxWidth: '280px', justifyContent: 'center' }}>
+              <a href="tel:9594917750" style={{
+                flex: 1, textAlign: 'center', padding: '12px 0', borderRadius: 12, border: '1px solid rgba(255,255,255,0.15)',
+                background: 'rgba(255,255,255,0.05)', color: '#fff', fontSize: 10, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase', textDecoration: 'none'
+              }}>Call Now</a>
+              <button
+                onClick={() => window.open('https://wa.me/919594917750', '_blank')}
+                style={{
+                  flex: 1, padding: '12px 0', borderRadius: 12, background: '#f59e0b', border: 'none',
+                  color: '#0a0d14', fontSize: 10, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase', cursor: 'pointer'
+                }}
+              >WhatsApp →</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
   )
 }
