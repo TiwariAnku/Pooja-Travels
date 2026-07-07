@@ -5,7 +5,7 @@ export default function Hero() {
     carType: 'Innova Crysta',
     name: '', mobile: '', employeeEmail: '',
     pickup: '', startDate: '', inTime: '',
-    dropAddress: '', dropDate: '', outTime: '', // Added outTime here
+    dropAddress: '', dropDate: '', outTime: '', 
     remarks: ''
   })
   const [loading, setLoading] = useState(false)
@@ -43,7 +43,7 @@ export default function Hero() {
 
     try {
       // 2. Fire the email payload request to your backend api for tracking proof
-      await fetch('http://localhost:3000/api/booking', {
+      const response = await fetch('http://localhost:3000/api/booking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -53,13 +53,20 @@ export default function Hero() {
           pickupAddress:  form.pickup,
           pickupDateTime: `${form.startDate} at ${form.inTime}`,
           dropAddress:    form.dropAddress,
-          dropDateTime:   `${form.dropDate} at ${form.outTime}`, // Track outTime on server too
+          dropDateTime:   `${form.dropDate} at ${form.outTime}`,
           carType:        form.carType,
           remarks:        form.remarks,
         })
       })
+
+      if (response.ok) {
+        setStatus('success')
+      } else {
+        setStatus('partial_success')
+      }
     } catch (err) {
       console.warn("Backend proof email failed, opening WhatsApp anyway:", err)
+      setStatus('partial_success')
     } finally {
       // 3. Reset form data parameters completely
       setForm({
@@ -70,10 +77,14 @@ export default function Hero() {
         remarks: ''
       })
       setLoading(false)
-      setStatus(null)
 
       // 4. Open WhatsApp cleanly inside a separate new window tab browser frame
       window.open(`https://wa.me/${targetWhatsAppNumber}?text=${encodedMessage}`, '_blank')
+
+      // 5. Auto clear the confirmation UI overlay after 5 seconds
+      setTimeout(() => {
+        setStatus(null)
+      }, 5000)
     }
   }
 
@@ -133,9 +144,22 @@ export default function Hero() {
             <p className="text-xs text-slate-500">GST Registered · GSTIN: 27AICPT7468H1ZP</p>
           </div>
 
+          {/* DYNAMIC ALERT MESSAGES */}
           {status === 'processing' && (
             <div className="mb-4 bg-amber-50 border border-amber-200 text-amber-800 text-sm px-4 py-3 rounded-lg animate-pulse">
               📬 Processing email log & launching WhatsApp tab...
+            </div>
+          )}
+
+          {status === 'success' && (
+            <div className="mb-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm px-4 py-3 rounded-lg font-medium">
+              ✅ Email logged successfully! Opening WhatsApp chat...
+            </div>
+          )}
+
+          {status === 'partial_success' && (
+            <div className="mb-4 bg-sky-50 border border-sky-200 text-sky-800 text-sm px-4 py-3 rounded-lg font-medium">
+              📱 Opening WhatsApp Chat window directly...
             </div>
           )}
 
