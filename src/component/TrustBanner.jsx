@@ -54,12 +54,12 @@ export function TrustBanner() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center gap-6">
-            <button className="w-full sm:w-auto bg-slate-900 text-white font-bold text-xs tracking-[0.2em] uppercase px-12 py-5 rounded-full hover:bg-amber-600 hover:shadow-xl hover:shadow-amber-200 transition-all duration-300">
+            {/* <button className="w-full sm:w-auto bg-slate-900 text-white font-bold text-xs tracking-[0.2em] uppercase px-12 py-5 rounded-full hover:bg-amber-600 hover:shadow-xl hover:shadow-amber-200 transition-all duration-300">
               Get a Free Quote
-            </button>
-            <button className="group flex items-center gap-2 text-slate-900 font-bold text-xs tracking-[0.2em] uppercase">
+            </button> */}
+            {/* <button className="group flex items-center gap-2 text-slate-900 font-bold text-xs tracking-[0.2em] uppercase">
               Learn More <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
-            </button>
+            </button> */}
           </div>
         </motion.div>
 

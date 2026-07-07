@@ -82,8 +82,20 @@ export default function PremiumFleet() {
     ? cars 
     : cars.filter(car => car.category.toLowerCase() === activeCategory.toLowerCase());
 
-  const handleBook = (carName) => {
-    alert(`📅 Redirecting to secure schedule checkout for: ${carName}`);
+  const handleBook = (car) => {
+    const phoneNumber = "919594917750"; // Standardized with international country code
+    const baseMessage = `Hello, I would like to request a reservation for the following vehicle from your Concierge Fleet:\n\n• Vehicle: ${car.name} (${car.code})\n• Type: ${car.type}\n• Base Rate: ₹${car.price}/KM\n\nPlease let me know the availability and next steps. Thank you!`;
+    
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(baseMessage)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const handleCatalogRequest = () => {
+    const phoneNumber = "919594917750";
+    const catalogMessage = `Hello, I am interested in exploring your custom car catalogs and premium fleet packages. Could you please share more options?`;
+    
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(catalogMessage)}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   return (
@@ -240,7 +252,7 @@ export default function PremiumFleet() {
 
                   {/* Booking CTA Button */}
                   <button 
-                    onClick={() => handleBook(car.name)}
+                    onClick={() => handleBook(car)}
                     className="w-full bg-white text-black py-3 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-amber-500 transition-all duration-300 active:scale-[0.99]"
                   >
                     Request Reservation
@@ -259,7 +271,10 @@ export default function PremiumFleet() {
           viewport={{ once: true }}
           className="mt-20 flex flex-col items-center gap-5"
         >
-          <button className="group border border-white/10 px-8 py-3.5 rounded-xl hover:border-amber-500/30 transition-all duration-500 bg-white/[0.01]">
+          <button 
+            onClick={handleCatalogRequest}
+            className="group border border-white/10 px-8 py-3.5 rounded-xl hover:border-amber-500/30 transition-all duration-500 bg-white/[0.01]"
+          >
             <span className="text-white font-bold text-[10px] tracking-[0.2em] uppercase flex items-center gap-3">
               Review Custom Catalogs <ChevronRight size={12} className="text-amber-500" />
             </span>

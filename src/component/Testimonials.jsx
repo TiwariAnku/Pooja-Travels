@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 const fleet = [
   {
     category: 'Executive Sedan',
@@ -31,9 +31,11 @@ export default function FleetSection() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 italic">Corporate Excellence.</span>
             </h3>
           </div>
-          <button className="bg-[#FF9F1C] hover:bg-[#e88f19] text-[#0A1128] font-bold px-8 py-4 rounded-md transition-all duration-300 uppercase text-xs tracking-widest">
-            View Full Fleet
-          </button>
+          <Link to="/Fleet">
+  <button className="bg-[#FF9F1C] hover:bg-[#e88f19] text-[#0A1128] font-bold px-8 py-4 rounded-md transition-all duration-300 uppercase text-xs tracking-widest">
+    View Full Fleet
+  </button>
+</Link>
         </div>
 
         {/* Fleet Grid */}
