@@ -44,7 +44,7 @@ export default function Hero() {
 
     try {
       // 2. Fire payload request to backend API and wait for it to complete sending emails
-      const response = await fetch('https://pooja-travles-backends.onrender.com/api/booking', {
+      const response = await fetch('https://backend-pooja.onrender.com/api/booking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
