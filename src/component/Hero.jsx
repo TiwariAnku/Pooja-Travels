@@ -5,7 +5,7 @@ export default function Hero() {
     carType: 'Innova Crysta',
     name: '', mobile: '', employeeEmail: '',
     pickup: '', startDate: '', inTime: '',
-    dropAddress: '', dropDate: '', outTime: '', 
+    dropAddress: '', dropDate: '',
     remarks: ''
   })
   const [loading, setLoading] = useState(false)
@@ -19,72 +19,41 @@ export default function Hero() {
   const handleBooking = async (e) => {
     e.preventDefault()
     setLoading(true)
-    setStatus('processing')
-
-    // 1. Prepare the updated WhatsApp message layout with return timings
-    const messageText = `*NEW CAB BOOKING REQUEST*
-----------------------------------
-*Employee Name:* ${form.name}
-*Cell No:* ${form.mobile}
-*Email:* ${form.employeeEmail}
-*Car Type:* ${form.carType}
-
-*Pick Up Location:* ${form.pickup}
-*Pick Up Schedule:* ${form.startDate} at ${form.inTime}
-
-*Drop Location:* ${form.dropAddress}
-*Drop Schedule:* ${form.dropDate}${form.outTime ? ` at ${form.outTime}` : ''}
-
-*Remarks:* ${form.remarks || 'None'}
-----------------------------------`;
-
-    const encodedMessage = encodeURIComponent(messageText)
-    const targetWhatsAppNumber = '919594917750'
+    setStatus(null)
 
     try {
-      // 2. Fire the email payload request to your backend api for tracking proof
-      const response = await fetch('http://localhost:3000/api/booking', {
-        method: 'POST',
+const res = await fetch('https://pooja-travles-backend.onrender.com/api/booking', {        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          empName:         form.name,
-          cellNo:          form.mobile,
+          empName:        form.name,
+          cellNo:         form.mobile,
           employeeEmail:  form.employeeEmail,
           pickupAddress:  form.pickup,
           pickupDateTime: `${form.startDate} at ${form.inTime}`,
           dropAddress:    form.dropAddress,
-          dropDateTime:   `${form.dropDate} at ${form.outTime}`,
+          dropDate:       form.dropDate,
           carType:        form.carType,
           remarks:        form.remarks,
         })
       })
 
-      if (response.ok) {
+      const data = await res.json()
+      if (data.success) {
         setStatus('success')
+        setForm({
+          carType: 'Innova Crysta',
+          name: '', mobile: '', employeeEmail: '',
+          pickup: '', startDate: '', inTime: '',
+          dropAddress: '', dropDate: '', remarks: ''
+        })
       } else {
-        setStatus('partial_success')
+        setStatus('error')
       }
     } catch (err) {
-      console.warn("Backend proof email failed, opening WhatsApp anyway:", err)
-      setStatus('partial_success')
+      console.error(err)
+      setStatus('error')
     } finally {
-      // 3. Reset form data parameters completely
-      setForm({
-        carType: 'Innova Crysta',
-        name: '', mobile: '', employeeEmail: '',
-        pickup: '', startDate: '', inTime: '',
-        dropAddress: '', dropDate: '', outTime: '',
-        remarks: ''
-      })
       setLoading(false)
-
-      // 4. Open WhatsApp cleanly inside a separate new window tab browser frame
-      window.open(`https://wa.me/${targetWhatsAppNumber}?text=${encodedMessage}`, '_blank')
-
-      // 5. Auto clear the confirmation UI overlay after 5 seconds
-      setTimeout(() => {
-        setStatus(null)
-      }, 5000)
     }
   }
 
@@ -144,22 +113,14 @@ export default function Hero() {
             <p className="text-xs text-slate-500">GST Registered · GSTIN: 27AICPT7468H1ZP</p>
           </div>
 
-          {/* DYNAMIC ALERT MESSAGES */}
-          {status === 'processing' && (
-            <div className="mb-4 bg-amber-50 border border-amber-200 text-amber-800 text-sm px-4 py-3 rounded-lg animate-pulse">
-              📬 Processing email log & launching WhatsApp tab...
-            </div>
-          )}
-
           {status === 'success' && (
-            <div className="mb-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm px-4 py-3 rounded-lg font-medium">
-              ✅ Email logged successfully! Opening WhatsApp chat...
+            <div className="mb-4 bg-green-50 border border-green-200 text-green-800 text-sm px-4 py-3 rounded-lg">
+              ✅ Booking confirmed! Emails sent successfully.
             </div>
           )}
-
-          {status === 'partial_success' && (
-            <div className="mb-4 bg-sky-50 border border-sky-200 text-sky-800 text-sm px-4 py-3 rounded-lg font-medium">
-              📱 Opening WhatsApp Chat window directly...
+          {status === 'error' && (
+            <div className="mb-4 bg-red-50 border border-red-200 text-red-800 text-sm px-4 py-3 rounded-lg">
+              ❌ Something went wrong. Please try again.
             </div>
           )}
 
@@ -217,7 +178,7 @@ export default function Hero() {
                 className={inputCls} onChange={handle} required />
             </div>
 
-            {/* Drop Date + Out Timing */}
+            {/* Drop Date + Car Type */}
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className={labelCls}>Date of Drop</label>
@@ -225,23 +186,16 @@ export default function Hero() {
                   type="date" className={inputCls} onChange={handle} required />
               </div>
               <div>
-                <label className={labelCls}>Out Time (Drop Time)</label>
-                <input name="outTime" value={form.outTime}
-                  type="time" className={inputCls} onChange={handle} required />
+                <label className={labelCls}>Car Type</label>
+                <select name="carType" value={form.carType} className={inputCls} onChange={handle}>
+                  <option>Innova Crysta</option>
+                  <option>Innova</option>
+                  <option>Etios</option>
+                  <option>D'zire</option>
+                  <option>Prime Sedan</option>
+                  <option>Executive SUV</option>
+                </select>
               </div>
-            </div>
-
-            {/* Car Type Selector */}
-            <div>
-              <label className={labelCls}>Car Type</label>
-              <select name="carType" value={form.carType} className={inputCls} onChange={handle}>
-                <option>Innova Crysta</option>
-                <option>Innova</option>
-                <option>Etios</option>
-                <option>D'zire</option>
-                <option>Prime Sedan</option>
-                <option>Executive SUV</option>
-              </select>
             </div>
 
             {/* Remarks */}
@@ -264,10 +218,10 @@ export default function Hero() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
                   </svg>
-                  <span>Processing...</span>
+                  <span>Sending...</span>
                 </>
               ) : (
-                <span>🚖 Confirm & Send Booking</span>
+                <span>🚖 Send Booking</span>
               )}
             </button>
 
