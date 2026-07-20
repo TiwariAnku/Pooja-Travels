@@ -9,7 +9,7 @@ export default function Hero() {
     remarks: ''
   })
   const [loading, setLoading] = useState(false)
-  const [status, setStatus]   = useState(null)
+  const [status, setStatus] = useState(null)
 
   const handle = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
@@ -21,7 +21,7 @@ export default function Hero() {
     setLoading(true)
     setStatus('processing')
 
-    // 1. Prepare the updated WhatsApp message layout with return timings
+    // 1. Prepare WhatsApp formatted message layout
     const messageText = `*NEW CAB BOOKING REQUEST*
 ----------------------------------
 *Employee Name:* ${form.name}
@@ -40,15 +40,16 @@ export default function Hero() {
 
     const encodedMessage = encodeURIComponent(messageText)
     const targetWhatsAppNumber = '919594917750'
+    const whatsappUrl = `https://wa.me/${targetWhatsAppNumber}?text=${encodedMessage}`
 
     try {
-      // 2. Fire the email payload request to your backend api for tracking proof
+      // 2. Fire payload request to backend API and wait for it to complete sending emails
       const response = await fetch('http://localhost:3000/api/booking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          empName:         form.name,
-          cellNo:          form.mobile,
+          empName:        form.name,
+          cellNo:         form.mobile,
           employeeEmail:  form.employeeEmail,
           pickupAddress:  form.pickup,
           pickupDateTime: `${form.startDate} at ${form.inTime}`,
@@ -61,27 +62,29 @@ export default function Hero() {
 
       if (response.ok) {
         setStatus('success')
+        
+        // Reset form parameters cleanly
+        setForm({
+          carType: 'Innova Crysta',
+          name: '', mobile: '', employeeEmail: '',
+          pickup: '', startDate: '', inTime: '',
+          dropAddress: '', dropDate: '', outTime: '',
+          remarks: ''
+        })
+
+        // 3. Email sent successfully! Open WhatsApp cleanly inside a separate new window tab
+        window.open(whatsappUrl, '_blank')
       } else {
         setStatus('partial_success')
+        alert("Booking received, but email delivery failed. Opening WhatsApp chat...")
+        window.open(whatsappUrl, '_blank')
       }
     } catch (err) {
-      console.warn("Backend proof email failed, opening WhatsApp anyway:", err)
+      console.warn("Backend connection issue:", err)
       setStatus('partial_success')
+      window.open(whatsappUrl, '_blank')
     } finally {
-      // 3. Reset form data parameters completely
-      setForm({
-        carType: 'Innova Crysta',
-        name: '', mobile: '', employeeEmail: '',
-        pickup: '', startDate: '', inTime: '',
-        dropAddress: '', dropDate: '', outTime: '',
-        remarks: ''
-      })
       setLoading(false)
-
-      // 4. Open WhatsApp cleanly inside a separate new window tab browser frame
-      window.open(`https://wa.me/${targetWhatsAppNumber}?text=${encodedMessage}`, '_blank')
-
-      // 5. Auto clear the confirmation UI overlay after 5 seconds
       setTimeout(() => {
         setStatus(null)
       }, 5000)
@@ -147,19 +150,19 @@ export default function Hero() {
           {/* DYNAMIC ALERT MESSAGES */}
           {status === 'processing' && (
             <div className="mb-4 bg-amber-50 border border-amber-200 text-amber-800 text-sm px-4 py-3 rounded-lg animate-pulse">
-              📬 Processing email log & launching WhatsApp tab...
+              📬 Sending emails to customer & admin first... Please wait.
             </div>
           )}
 
           {status === 'success' && (
             <div className="mb-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm px-4 py-3 rounded-lg font-medium">
-              ✅ Email logged successfully! Opening WhatsApp chat...
+              ✅ Emails sent successfully! Opening WhatsApp in a new tab...
             </div>
           )}
 
           {status === 'partial_success' && (
             <div className="mb-4 bg-sky-50 border border-sky-200 text-sky-800 text-sm px-4 py-3 rounded-lg font-medium">
-              📱 Opening WhatsApp Chat window directly...
+              📱 Redirecting to WhatsApp channel...
             </div>
           )}
 
@@ -264,7 +267,7 @@ export default function Hero() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
                   </svg>
-                  <span>Processing...</span>
+                  <span>Sending Mail...</span>
                 </>
               ) : (
                 <span>🚖 Confirm & Send Booking</span>
